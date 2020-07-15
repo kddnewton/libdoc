@@ -1,0 +1,29 @@
+#ifndef DOC_BUFFER_H
+#define DOC_BUFFER_H
+
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct doc_buffer {
+  size_t size;
+  size_t capacity;
+  char *contents;
+
+  short indent;
+  short position;
+} doc_buffer_t;
+
+doc_buffer_t* doc_buffer_make();
+void doc_buffer_unmake(doc_buffer_t* buffer);
+
+void doc_buffer_append(doc_buffer_t* buffer, char* contents, size_t size);
+
+void doc_buffer_indent_incr(doc_buffer_t* buffer);
+void doc_buffer_indent_decr(doc_buffer_t* buffer);
+
+void doc_buffer_position_incr(doc_buffer_t* buffer, short delta);
+void doc_buffer_position_set(doc_buffer_t* buffer, short position);
+
+void doc_buffer_newline(doc_buffer_t* buffer, unsigned short tab_size);
+
+#endif
