@@ -20,9 +20,6 @@ doc_buffer_t* doc_buffer_make() {
   buffer->contents = contents;
   buffer->contents[0] = '\0';
 
-  buffer->indent = 0;
-  buffer->position = 0;
-
   return buffer;
 }
 
@@ -59,30 +56,10 @@ void doc_buffer_append(doc_buffer_t* buffer, char* contents, size_t size) {
   buffer->contents[buffer->size] = '\0';
 }
 
-void doc_buffer_indent_incr(doc_buffer_t* buffer) {
-  buffer->indent++;
-}
+void doc_buffer_newline(doc_buffer_t* buffer, size_t indent) {
+  char segment[indent];
+  memset(segment, ' ', indent);
 
-void doc_buffer_indent_decr(doc_buffer_t* buffer) {
-  buffer->indent--;
-}
-
-void doc_buffer_position_incr(doc_buffer_t* buffer, short delta) {
-  buffer->position += delta;
-}
-
-void doc_buffer_position_set(doc_buffer_t* buffer, short position) {
-  buffer->position = position;
-}
-
-void doc_buffer_newline(doc_buffer_t* buffer, unsigned short tab_size) {
   doc_buffer_append(buffer, "\n", 1);
-
-  unsigned short size = buffer->indent * tab_size;
-  char segment[size];
-
-  memset(segment, ' ', size);
-  doc_buffer_append(buffer, segment, size);
-
-  buffer->position = 0;
+  doc_buffer_append(buffer, segment, indent);
 }

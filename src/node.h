@@ -10,7 +10,8 @@ enum doc_node_type {
   INDENT,
   LINE,
   LITERAL,
-  LITERAL_LINE
+  LITERAL_LINE,
+  SOFT_LINE
 };
 
 typedef struct doc_node {
@@ -31,5 +32,6 @@ doc_node_t* doc_indent(doc_node_t* contents);
 doc_node_t* doc_line();
 doc_node_t* doc_literal(size_t size, char* contents);
 doc_node_t* doc_literal_line();
+doc_node_t* doc_soft_line();
 
 #endif

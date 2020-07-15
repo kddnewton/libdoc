@@ -3,10 +3,11 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-
 #include "buffer.h"
+#include "debug.h"
 #include "node.h"
 #include "options.h"
+#include "stack.h"
 
 void doc_print(doc_buffer_t* buffer, doc_node_t* node, doc_options_t* options);
 

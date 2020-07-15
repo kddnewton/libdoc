@@ -38,6 +38,7 @@ void doc_node_unmake(doc_node_t* node) {
     case LINE:
     case LITERAL:
     case LITERAL_LINE:
+    case SOFT_LINE:
       break;
   }
 
@@ -66,4 +67,8 @@ doc_node_t* doc_literal(size_t size, char* contents) {
 
 doc_node_t* doc_literal_line() {
   return doc_node_make(LITERAL_LINE, 0, NULL, NULL);
+}
+
+doc_node_t* doc_soft_line() {
+  return doc_node_make(SOFT_LINE, 0, NULL, NULL);
 }
