@@ -11,53 +11,52 @@
 static doc_node_t* doc_debug_convert(doc_node_t* node) {
   switch (node->type) {
     case CONCAT: {
-      doc_node_t **children = (doc_node_t **) malloc(sizeof(doc_node_t *) * 4);
-      children[0] = doc_literal(1, "[");
-      children[2] = doc_soft_line();
-      children[3] = doc_literal(1, "]");
-
-      size_t size = (node->size - 1) * 3 + 2;
-      doc_node_t **indented = (doc_node_t **) malloc(sizeof(doc_node_t *) * size);
-      indented[0] = doc_soft_line();
-
-      // Yeah, this is only in here until we support `join` nodes
-      for (int idx = 0; idx < node->size - 1; idx++) {
-        indented[idx * 3 + 1] = doc_debug_convert(node->contents.children[idx]);
-        indented[idx * 3 + 2] = doc_literal(1, ",");
-        indented[idx * 3 + 3] = doc_line();
+      doc_node_t **converted = (doc_node_t **) malloc(sizeof(doc_node_t *) * node->size);
+      for (int idx = 0; idx < node->size; idx++) {
+        converted[idx] = doc_debug_convert(node->contents.children[idx]);
       }
-      indented[(node->size - 1) * 3 + 1] = doc_debug_convert(node->contents.children[node->size - 1]);
 
-      children[1] = doc_indent(doc_concat(size, indented));
-      return doc_concat(4, children);
+      return doc_concat_va(4,
+        doc_literal("["),
+        doc_indent(
+          doc_concat_va(
+            2,
+            doc_soft_line(),
+            doc_join(
+              doc_concat_va(2, doc_literal(","), doc_line()),
+              node->size,
+              converted
+            )
+          )
+        ),
+        doc_soft_line(),
+        doc_literal("]")
+      );
     }
-    case GROUP: {
-      doc_node_t **children = (doc_node_t **) malloc(sizeof(doc_node_t *) * 3);
-      children[0] = doc_literal(6, "group(");
-      children[1] = doc_debug_convert(node->contents.child);
-      children[2] = doc_literal(1, ")");
-
-      return doc_concat(3, children);
-    }
-    case INDENT: {
-      doc_node_t **children = (doc_node_t **) malloc(sizeof(doc_node_t *) * 3);
-      children[0] = doc_literal(7, "indent(");
-      children[1] = doc_debug_convert(node->contents.child);
-      children[2] = doc_literal(1, ")");
-
-      return doc_concat(3, children);
-    }
+    case GROUP:
+      return doc_concat_va(3,
+        doc_literal("group("),
+        doc_debug_convert(node->contents.child),
+        doc_literal(")")
+      );
+    case INDENT:
+      return doc_concat_va(3,
+        doc_literal("indent("),
+        doc_debug_convert(node->contents.child),
+        doc_literal(")")
+      );
+      break;
     case LINE:
-      return doc_literal(4, "line");
+      return doc_literal("line");
     case LITERAL: {
       char copied[node->size + 2];
       sprintf(copied, "\"%s\"", node->contents.string);
-      return doc_literal(node->size + 2, copied);
+      return doc_literal_n(node->size + 2, copied);
     }
     case LITERAL_LINE:
-      return doc_literal(12, "literalline");
+      return doc_literal("literalline");
     case SOFT_LINE:
-      return doc_literal(8, "softline");
+      return doc_literal("softline");
   }
 }
 

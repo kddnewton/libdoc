@@ -11,9 +11,9 @@ int main(int argc, char **argv) {
   doc_buffer_t *buffer = doc_buffer_make();
 
   doc_node_t *contents[3] = {
-    doc_literal(5, "Hello"),
+    doc_literal("Hello"),
     doc_line(),
-    doc_literal(6, "world!")
+    doc_literal("world!")
   };
 
   doc_node_t *node = doc_group(doc_concat(3, contents));
