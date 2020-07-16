@@ -75,6 +75,12 @@ static bool doc_fits(doc_node_t* root, enum mode mode, size_t indent, int size) 
         }
         break;
       }
+      case DEDENT:
+        doc_stack_push(
+          stack,
+          doc_command_make(command->node->contents.child, command->mode, command->indent - 1)
+        );
+        break;
       case GROUP:
         doc_stack_push(
           stack,
@@ -145,6 +151,12 @@ void doc_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
             doc_command_make(command->node->contents.children[idx], command->mode, command->indent)
           );
         }
+        break;
+      case DEDENT:
+        doc_stack_push(
+          stack,
+          doc_command_make(command->node->contents.child, command->mode, command->indent - 1)
+        );
         break;
       case GROUP:
         doc_stack_push(

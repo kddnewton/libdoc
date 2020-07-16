@@ -9,6 +9,7 @@
 
 enum doc_node_type {
   CONCAT,
+  DEDENT,
   GROUP,
   INDENT,
   LINE,
@@ -29,10 +30,11 @@ typedef struct doc_node {
 
 void doc_node_unmake(doc_node_t* doc);
 
-doc_node_t* doc_concat(size_t size, doc_node_t** contents);
+doc_node_t* doc_concat(size_t size, doc_node_t** children);
 doc_node_t* doc_concat_n(size_t size, ...);
-doc_node_t* doc_group(doc_node_t* contents);
-doc_node_t* doc_indent(doc_node_t* contents);
+doc_node_t* doc_dedent(doc_node_t* child);
+doc_node_t* doc_group(doc_node_t* child);
+doc_node_t* doc_indent(doc_node_t* child);
 doc_node_t* doc_join(doc_node_t* separator, size_t size, doc_node_t** content);
 doc_node_t* doc_line();
 doc_node_t* doc_literal(char* string);

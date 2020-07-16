@@ -42,6 +42,8 @@ static doc_node_t* doc_node_clone(doc_node_t *node) {
 
       return doc_concat(node->size, cloned);
     }
+    case DEDENT:
+      return doc_dedent(doc_node_clone(node->contents.child));
     case GROUP:
       return doc_group(doc_node_clone(node->contents.child));
     case INDENT:
@@ -63,6 +65,7 @@ static doc_node_t* doc_node_clone(doc_node_t *node) {
  */
 void doc_node_unmake(doc_node_t* node) {
   switch (node->type) {
+    case DEDENT:
     case GROUP:
     case INDENT:
       doc_node_unmake(node->contents.child);
@@ -114,6 +117,15 @@ doc_node_t* doc_concat_n(size_t size, ...) {
 
   va_end(contents);
   return doc_concat(size, children);
+}
+
+/* Allocates and instantiates a new DEDENT node.
+ * 
+ * @param {doc_node_t*} child - the child doc node that this node now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
+doc_node_t* doc_dedent(doc_node_t* child) {
+  return doc_node_make(DEDENT, 1, child, NULL, NULL);
 }
 
 /* Allocates and instantiates a new GROUP node.

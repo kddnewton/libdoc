@@ -33,6 +33,13 @@ static doc_node_t* doc_debug_convert(doc_node_t* node) {
         doc_literal("]")
       );
     }
+    case DEDENT:
+      return doc_concat_n(3,
+        doc_literal("dedent("),
+        doc_debug_convert(node->contents.child),
+        doc_literal(")")
+      );
+      break;
     case GROUP:
       return doc_concat_n(3,
         doc_literal("group("),
