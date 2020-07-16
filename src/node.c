@@ -1,5 +1,9 @@
 #include "node.h"
 
+/* Allocates and instantiates a new node struct.
+ * 
+ * @returns {doc_node_t*} - a node that will require freeing
+ */
 static doc_node_t* doc_node_make(enum doc_node_type type, size_t size, doc_node_t* child, doc_node_t** children, char* string) {
   doc_node_t *node;
 
@@ -22,6 +26,12 @@ static doc_node_t* doc_node_make(enum doc_node_type type, size_t size, doc_node_
   return node;
 }
 
+/* Deeply clones a node struct along with its contents.
+ * 
+ * @param {doc_node_t*} node - the node to clone
+ * @returns {doc_node_t*} - a newly allocated node struct that will require
+ *   freeing
+ */
 static doc_node_t* doc_node_clone(doc_node_t *node) {
   switch (node->type) {
     case CONCAT: {
@@ -47,6 +57,10 @@ static doc_node_t* doc_node_clone(doc_node_t *node) {
   }
 }
 
+/* Deallocates a node struct along with its contents.
+ * 
+ * @param {doc_node_t*} node - the node to deallocate
+ */
 void doc_node_unmake(doc_node_t* node) {
   switch (node->type) {
     case GROUP:
@@ -70,10 +84,25 @@ void doc_node_unmake(doc_node_t* node) {
   doc_dealloc(node);
 }
 
+/* Allocates and instantiates a new CONCAT node.
+ * 
+ * @param {size_t} size - the number of children
+ * @param {doc_node_t**} children - the list of other nodes to concatentate that
+ *   this node now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_concat(size_t size, doc_node_t** children) {
   return doc_node_make(CONCAT, size, NULL, children, NULL);
 }
 
+/* Allocates and instantiates a new CONCAT node from a variadic list of
+ * arguments.
+ * 
+ * @param {size_t} size - the number of children
+ * @param {...} - the variadic list of other nodes to concatenate that this node
+ *   now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_concat_n(size_t size, ...) {
   va_list contents;
   va_start(contents, size);
@@ -87,14 +116,35 @@ doc_node_t* doc_concat_n(size_t size, ...) {
   return doc_concat(size, children);
 }
 
+/* Allocates and instantiates a new GROUP node.
+ * 
+ * @param {doc_node_t*} child - the child doc node that this node now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_group(doc_node_t* child) {
   return doc_node_make(GROUP, 1, child, NULL, NULL);
 }
 
+/* Allocates and instantiates a new INDENT node.
+ * 
+ * @param {doc_node_t*} child - the child doc node that this node now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_indent(doc_node_t* child) {
   return doc_node_make(INDENT, 1, child, NULL, NULL);
 }
 
+/* Allocates and instantiates a new CONCAT node made by joining together the
+ * given contents.
+ * 
+ * @param {doc_node_t*} separator - the node representing what should be placed
+ *   between the other nodes given as content; this node will be used for this
+ *   function and then immediately freed
+ * @params {size_t} size - the number of children to be joined together
+ * @param {doc_node_t**} content - the list of other nodes to concatentate that
+ *   this node now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_join(doc_node_t* separator, size_t size, doc_node_t** content) {
   size_t children_size = (size * 2) - 1;
   doc_node_t **children = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * children_size);
@@ -110,14 +160,29 @@ doc_node_t* doc_join(doc_node_t* separator, size_t size, doc_node_t** content) {
   return doc_concat(children_size, children);
 }
 
+/* Allocates and instantiates a new LINE node.
+ * 
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_line() {
   return doc_node_make(LINE, 0, NULL, NULL, NULL);
 }
 
+/* Allocates and instantiates a new LITERAL node.
+ * 
+ * @param {char*} string - the borrowed content of this literal node
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_literal(char* string) {
   return doc_literal_n(strlen(string), string);
 }
 
+/* Allocates and instantiates a new LITERAL node.
+ * 
+ * @param {size_t} size - the size of the string
+ * @param {char*} string - the borrowed content of this literal node
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_literal_n(size_t size, char* string) {
   char *copied = (char *) doc_alloc(sizeof(char) * size);
   strncpy(copied, string, size);
@@ -125,10 +190,18 @@ doc_node_t* doc_literal_n(size_t size, char* string) {
   return doc_node_make(LITERAL, size, NULL, NULL, copied);
 }
 
+/* Allocates and instantiates a new LITERAL_LINE node.
+ * 
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_literal_line() {
   return doc_node_make(LITERAL_LINE, 0, NULL, NULL, NULL);
 }
 
+/* Allocates and instantiates a new SOFT_LINE node.
+ * 
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
 doc_node_t* doc_soft_line() {
   return doc_node_make(SOFT_LINE, 0, NULL, NULL, NULL);
 }

@@ -5,10 +5,21 @@ enum mode { MODE_BREAK, MODE_FLAT };
 typedef struct doc_command {
   doc_node_t *node;
   enum mode mode;
-  unsigned short indent;
+  size_t indent;
 } doc_command_t;
 
-doc_command_t* doc_command_make(doc_node_t* node, enum mode mode, unsigned short indent) {
+/* Allocates and instantiates a new command struct.
+ * 
+ * @param {doc_node_t*} node - the pointer to the node that this command will
+ *   represent
+ * @param {enum mode} mode - the current mode of the printer when this command
+ *   was made
+ * @param {size_t} indent - the current indent of the printer when this command
+ *   was made
+ * @returns {doc_command_t*} - a newly allocated command that will require
+ *   freeing
+ */
+doc_command_t* doc_command_make(doc_node_t* node, enum mode mode, size_t indent) {
   doc_command_t *command;
 
   command = (doc_command_t *) doc_alloc(sizeof(doc_command_t));
@@ -23,15 +34,27 @@ doc_command_t* doc_command_make(doc_node_t* node, enum mode mode, unsigned short
   return command;
 }
 
+/* Deallocates a command struct.
+ * 
+ * @param {doc_command_t*} command - the command to deallocate
+ */
 void doc_command_unmake(doc_command_t *command) {
   doc_dealloc(command);
 }
 
-static bool doc_fits(doc_node_t* head, enum mode mode, unsigned short indent, unsigned short size) {
+/* Whether or not the given doc node fits into the remaining space on the line.
+ * 
+ * @param {doc_node_t*} root - the doc node to check
+ * @param {enum mode} mode - the current mode of the printer
+ * @param {size_t} indent - the current indentation level of the printer
+ * @param {int} size - the remaining space on the current line
+ * @returns {bool} - whether or not there is enough space
+ */
+static bool doc_fits(doc_node_t* root, enum mode mode, size_t indent, int size) {
   int remaining = size;
   bool fits = false;
 
-  doc_stack_t *stack = doc_stack_make(doc_command_make(head, mode, indent));
+  doc_stack_t *stack = doc_stack_make(doc_command_make(root, mode, indent));
   doc_command_t *command;
 
   while (remaining > 0 && !fits) {
@@ -99,10 +122,16 @@ static bool doc_fits(doc_node_t* head, enum mode mode, unsigned short indent, un
   return fits;
 }
 
-void doc_print(doc_buffer_t* buffer, doc_node_t* head, doc_options_t* options) {
-  unsigned short position = 0;
+/* Print the given doc node onto the given buffer using the given options.
+ * 
+ * @param {doc_buffer_t*} buffer - the buffer on which to print the doc node
+ * @param {doc_node_t*} node - the node to print
+ * @param {doc_options_t*} options - the options to use for printing
+ */
+void doc_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
+  int position = 0;
 
-  doc_stack_t *stack = doc_stack_make(doc_command_make(head, MODE_BREAK, 0));
+  doc_stack_t *stack = doc_stack_make(doc_command_make(root, MODE_BREAK, 0));
   doc_command_t *command;
 
   while (!doc_stack_is_empty(stack)) {
