@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 enum doc_node_type {
   CONCAT,
@@ -18,12 +19,12 @@ typedef struct doc_node {
   enum doc_node_type type;
   size_t size;
   union contents {
-    struct doc_node *node;
+    struct doc_node *child;
+    struct doc_node **children;
     char *string;
   } contents;
 } doc_node_t;
 
-doc_node_t* doc_node_content_at_index(doc_node_t* node, int idx);
 void doc_node_unmake(doc_node_t* doc);
 
 doc_node_t* doc_concat(size_t size, doc_node_t** contents);

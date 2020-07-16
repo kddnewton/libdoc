@@ -24,4 +24,6 @@ bool doc_stack_is_empty(doc_stack_t *stack);
 void doc_stack_push(doc_stack_t *stack, void* value);
 void* doc_stack_pop(doc_stack_t *stack);
 
+size_t doc_stack_size(doc_stack_t *stack);
+
 #endif

@@ -1,12 +1,13 @@
 #include <stdio.h>
 
 #include "buffer.h"
+#include "debug.h"
 #include "node.h"
 #include "options.h"
 #include "print.h"
 
 int main(int argc, char **argv) {
-  doc_options_t *options = doc_options_make(2, 80);
+  doc_options_t *options = doc_options_make(2, 10);
   doc_buffer_t *buffer = doc_buffer_make();
 
   doc_node_t *contents[3] = {
@@ -16,6 +17,7 @@ int main(int argc, char **argv) {
   };
 
   doc_node_t *node = doc_group(doc_concat(3, contents));
+  doc_debug(node);
 
   doc_print(buffer, node, options);
   printf("%s\n", buffer->contents);

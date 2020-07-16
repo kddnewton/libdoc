@@ -93,3 +93,15 @@ void* doc_stack_pop(doc_stack_t *stack) {
 
   return value;
 }
+
+size_t doc_stack_size(doc_stack_t *stack) {
+  size_t size = 0;
+  doc_stack_node_t *node = stack->head;
+
+  while (node) {
+    size += 1;
+    node = node->next;
+  }
+
+  return size;
+}
