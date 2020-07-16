@@ -19,8 +19,7 @@ static doc_node_t* doc_debug_convert(doc_node_t* node) {
       return doc_concat_n(4,
         doc_literal("["),
         doc_indent(
-          doc_concat_n(
-            2,
+          doc_concat_n(2,
             doc_soft_line(),
             doc_join(
               doc_concat_n(2, doc_literal(","), doc_line()),
@@ -45,6 +44,23 @@ static doc_node_t* doc_debug_convert(doc_node_t* node) {
         doc_literal("group("),
         doc_debug_convert(node->contents.child),
         doc_literal(")")
+      );
+    case IF_BREAK:
+      return doc_group(
+        doc_concat_n(3,
+          doc_literal("ifBreak("),
+          doc_indent(
+            doc_concat_n(5,
+              doc_soft_line(),
+              doc_debug_convert(node->contents.children[0]),
+              doc_literal(","),
+              doc_line(),
+              doc_debug_convert(node->contents.children[1])
+            )
+          ),
+          doc_soft_line(),
+          doc_literal(")")
+        )
       );
     case INDENT:
       return doc_concat_n(3,

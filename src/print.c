@@ -87,6 +87,22 @@ static bool doc_fits(doc_node_t* root, enum mode mode, size_t indent, int size) 
           doc_command_make(command->node->contents.child, command->mode, command->indent)
         );
         break;
+      case IF_BREAK:
+        switch (command->mode) {
+          case MODE_FLAT:
+            doc_stack_push(
+              stack,
+              doc_command_make(doc_if_break_flat_child(command->node), command->mode, command->indent)
+            );
+            break;
+          case MODE_BREAK:
+            doc_stack_push(
+              stack,
+              doc_command_make(doc_if_break_break_child(command->node), command->mode, command->indent)
+            );
+            break;
+        }
+        break;
       case INDENT:
         doc_stack_push(
           stack,
@@ -167,6 +183,22 @@ void doc_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
             command->indent
           )
         );
+        break;
+      case IF_BREAK:
+        switch (command->mode) {
+          case MODE_FLAT:
+            doc_stack_push(
+              stack,
+              doc_command_make(doc_if_break_flat_child(command->node), command->mode, command->indent)
+            );
+            break;
+          case MODE_BREAK:
+            doc_stack_push(
+              stack,
+              doc_command_make(doc_if_break_break_child(command->node), command->mode, command->indent)
+            );
+            break;
+        }
         break;
       case INDENT:
         doc_stack_push(

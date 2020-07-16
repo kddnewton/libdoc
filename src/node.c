@@ -34,13 +34,14 @@ static doc_node_t* doc_node_make(enum doc_node_type type, size_t size, doc_node_
  */
 static doc_node_t* doc_node_clone(doc_node_t *node) {
   switch (node->type) {
-    case CONCAT: {
+    case CONCAT:
+    case IF_BREAK: {
       doc_node_t **cloned = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * node->size);
       for (int idx = 0; idx < node->size; idx++) {
         cloned[idx] = doc_node_clone(node->contents.children[idx]);
       }
 
-      return doc_concat(node->size, cloned);
+      return doc_node_make(node->type, node->size, NULL, cloned, NULL);
     }
     case DEDENT:
       return doc_dedent(doc_node_clone(node->contents.child));
@@ -71,6 +72,7 @@ void doc_node_unmake(doc_node_t* node) {
       doc_node_unmake(node->contents.child);
       break;
     case CONCAT:
+    case IF_BREAK:
       for (int idx = 0; idx < node->size; idx++) {
         doc_node_unmake(node->contents.children[idx]);
       }
@@ -135,6 +137,42 @@ doc_node_t* doc_dedent(doc_node_t* child) {
  */
 doc_node_t* doc_group(doc_node_t* child) {
   return doc_node_make(GROUP, 1, child, NULL, NULL);
+}
+
+/* Allocates and instantiates a new IF_BREAK node.
+ * 
+ * @param {doc_node_t*} break_child - the child doc to print when the
+ *   surrounding group is being broken that this node now owns
+ * @param {doc_node_t*} flat_child - the child doc to print when the surrounding
+ *   group fits is unbroken that this node now owns
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
+doc_node_t* doc_if_break(doc_node_t* break_child, doc_node_t* flat_child) {
+  doc_node_t **children = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * 2);
+  children[0] = break_child;
+  children[1] = flat_child;
+
+  return doc_node_make(IF_BREAK, 2, NULL, children, NULL);
+}
+
+/* A convenience function for returning the pointer to the contents that should
+ * be printed when the surrounding group is broken.
+ * 
+ * @param {doc_node_t*} node - the parent node
+ * @returns {doc_node_t*} - the child node
+ */
+doc_node_t* doc_if_break_break_child(doc_node_t* node) {
+  return node->contents.children[0];
+}
+
+/* A convenience function for returning the pointer to the contents that should
+ * be printed when the surrounding group is unbroken.
+ * 
+ * @param {doc_node_t*} node - the parent node
+ * @returns {doc_node_t*} - the child node
+ */
+doc_node_t* doc_if_break_flat_child(doc_node_t* node) {
+  return node->contents.children[1];
 }
 
 /* Allocates and instantiates a new INDENT node.
