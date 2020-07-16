@@ -1,21 +1,23 @@
 #include "buffer.h"
 
+#define INITIAL_CAPACITY 256
+
 doc_buffer_t* doc_buffer_make() {
   doc_buffer_t *buffer;
   char *contents;
 
-  buffer = (doc_buffer_t *) malloc(sizeof(doc_buffer_t));
+  buffer = (doc_buffer_t *) doc_alloc(sizeof(doc_buffer_t));
   if (buffer == NULL) {
     return NULL;
   }
 
-  contents = (char *) malloc(256);
+  contents = (char *) doc_alloc(sizeof(char) * INITIAL_CAPACITY);
   if (contents == NULL) {
     return NULL;
   }
 
   buffer->size = 0;
-  buffer->capacity = 256;
+  buffer->capacity = INITIAL_CAPACITY;
 
   buffer->contents = contents;
   buffer->contents[0] = '\0';
@@ -24,8 +26,8 @@ doc_buffer_t* doc_buffer_make() {
 }
 
 void doc_buffer_unmake(doc_buffer_t* buffer) {
-  free(buffer->contents);
-  free(buffer);
+  doc_dealloc(buffer->contents);
+  doc_dealloc(buffer);
 }
 
 static void doc_buffer_expand(doc_buffer_t* buffer, size_t minimum) {
@@ -34,13 +36,13 @@ static void doc_buffer_expand(doc_buffer_t* buffer, size_t minimum) {
     next_capacity *= 2;
   }
 
-  char *contents = (char *) malloc(next_capacity);
+  char *contents = (char *) doc_alloc(sizeof(char) * next_capacity);
   if (contents == NULL) {
     return;
   }
 
   strncpy(contents, buffer->contents, buffer->size);
-  free(buffer->contents);
+  doc_dealloc(buffer->contents);
 
   buffer->capacity = next_capacity;
   buffer->contents = contents;

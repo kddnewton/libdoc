@@ -3,7 +3,7 @@
 doc_options_t* doc_options_make(unsigned short tab_size, unsigned short line_length) {
   doc_options_t *options;
 
-  options = (doc_options_t *) malloc(sizeof(doc_options_t));
+  options = (doc_options_t *) doc_alloc(sizeof(doc_options_t));
   if (options == NULL) {
     return NULL;
   }
@@ -15,5 +15,5 @@ doc_options_t* doc_options_make(unsigned short tab_size, unsigned short line_len
 }
 
 void doc_options_unmake(doc_options_t* options) {
-  free(options);
+  doc_dealloc(options);
 }

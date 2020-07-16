@@ -11,7 +11,7 @@ typedef struct doc_command {
 doc_command_t* doc_command_make(doc_node_t* node, enum mode mode, unsigned short indent) {
   doc_command_t *command;
 
-  command = (doc_command_t *) malloc(sizeof(doc_command_t));
+  command = (doc_command_t *) doc_alloc(sizeof(doc_command_t));
   if (command == NULL) {
     return NULL;
   }
@@ -24,7 +24,7 @@ doc_command_t* doc_command_make(doc_node_t* node, enum mode mode, unsigned short
 }
 
 void doc_command_unmake(doc_command_t *command) {
-  free(command);
+  doc_dealloc(command);
 }
 
 static bool doc_fits(doc_node_t* head, enum mode mode, unsigned short indent, unsigned short size) {

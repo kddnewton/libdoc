@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include "buffer.h"
+#include "memory.h"
 #include "node.h"
 #include "options.h"
 #include "print.h"

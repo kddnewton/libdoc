@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "buffer.h"
 #include "debug.h"
+#include "memory.h"
 #include "node.h"
 #include "options.h"
 #include "stack.h"

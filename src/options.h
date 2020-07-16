@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include "memory.h"
 
 typedef struct doc_options {
   unsigned short tab_size;

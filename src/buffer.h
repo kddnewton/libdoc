@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "memory.h"
 
 typedef struct doc_buffer {
   size_t size;

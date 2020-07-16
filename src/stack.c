@@ -3,7 +3,7 @@
 static doc_stack_node_t* doc_stack_node_make(void *value) {
   doc_stack_node_t *node;
 
-  node = (doc_stack_node_t *) malloc(sizeof(doc_stack_node_t));
+  node = (doc_stack_node_t *) doc_alloc(sizeof(doc_stack_node_t));
   if (node == NULL) {
     return NULL;
   }
@@ -16,14 +16,14 @@ static doc_stack_node_t* doc_stack_node_make(void *value) {
 }
 
 static void doc_stack_node_unmake(doc_stack_node_t *node) {
-  free(node);
+  doc_dealloc(node);
 }
 
 doc_stack_t* doc_stack_make(void *value) {
   doc_stack_t *stack;
   doc_stack_node_t *head;
 
-  stack = (doc_stack_t *) malloc(sizeof(doc_stack_t));
+  stack = (doc_stack_t *) doc_alloc(sizeof(doc_stack_t));
   if (stack == NULL) {
     return NULL;
   }
@@ -49,7 +49,7 @@ void doc_stack_unmake(doc_stack_t* stack) {
     doc_stack_node_unmake(prev);
   }
 
-  free(stack);
+  doc_dealloc(stack);
 }
 
 bool doc_stack_is_empty(doc_stack_t *stack) {
