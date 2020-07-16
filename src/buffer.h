@@ -9,9 +9,6 @@ typedef struct doc_buffer {
   size_t size;
   size_t capacity;
   char *contents;
-
-  short indent;
-  short position;
 } doc_buffer_t;
 
 doc_buffer_t* doc_buffer_make();
