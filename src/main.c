@@ -7,7 +7,7 @@
 #include "print.h"
 
 int main(int argc, char **argv) {
-  doc_options_t *options = doc_options_make(2, 10);
+  doc_options_t *options = doc_options_make(2, 80);
   doc_buffer_t *buffer = doc_buffer_make();
 
   doc_node_t *contents[3] = {
