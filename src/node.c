@@ -74,7 +74,7 @@ doc_node_t* doc_concat(size_t size, doc_node_t** children) {
   return doc_node_make(CONCAT, size, NULL, children, NULL);
 }
 
-doc_node_t* doc_concat_va(size_t size, ...) {
+doc_node_t* doc_concat_n(size_t size, ...) {
   va_list contents;
   va_start(contents, size);
 

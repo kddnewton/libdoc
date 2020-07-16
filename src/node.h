@@ -29,7 +29,7 @@ typedef struct doc_node {
 void doc_node_unmake(doc_node_t* doc);
 
 doc_node_t* doc_concat(size_t size, doc_node_t** contents);
-doc_node_t* doc_concat_va(size_t size, ...);
+doc_node_t* doc_concat_n(size_t size, ...);
 doc_node_t* doc_group(doc_node_t* contents);
 doc_node_t* doc_indent(doc_node_t* contents);
 doc_node_t* doc_join(doc_node_t* separator, size_t size, doc_node_t** content);
