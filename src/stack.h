@@ -12,8 +12,6 @@ typedef struct doc_stack_node {
 } doc_stack_node_t;
 
 typedef struct doc_stack {
-  int size;
-  int capacity;
   doc_stack_node_t *head;
   doc_stack_node_t *tail;
 } doc_stack_t;
