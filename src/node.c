@@ -47,6 +47,8 @@ static doc_node_t* doc_node_clone(doc_node_t *node) {
       return doc_dedent(doc_node_clone(node->contents.child));
     case GROUP:
       return doc_group(doc_node_clone(node->contents.child));
+    case HARD_LINE:
+      return doc_hard_line();
     case INDENT:
       return doc_indent(doc_node_clone(node->contents.child));
     case LINE:
@@ -80,6 +82,7 @@ void doc_node_unmake(doc_node_t* node) {
     case LITERAL:
       doc_dealloc(node->contents.string);
       break;
+    case HARD_LINE:
     case LINE:
     case LITERAL_LINE:
     case SOFT_LINE:
@@ -137,6 +140,14 @@ doc_node_t* doc_dedent(doc_node_t* child) {
  */
 doc_node_t* doc_group(doc_node_t* child) {
   return doc_node_make(GROUP, 1, child, NULL, NULL);
+}
+
+/* Allocates and instantiates a new HARD_LINE node.
+ * 
+ * @returns {doc_node_t*} - a newly allocated node that will require freeing
+ */
+doc_node_t* doc_hard_line() {
+  return doc_node_make(HARD_LINE, 0, NULL, NULL, NULL);
 }
 
 /* Allocates and instantiates a new IF_BREAK node.

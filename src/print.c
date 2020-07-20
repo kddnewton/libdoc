@@ -87,6 +87,9 @@ static bool doc_fits(doc_node_t* root, enum mode mode, size_t indent, int size) 
           doc_command_make(command->node->contents.child, command->mode, command->indent)
         );
         break;
+      case HARD_LINE:
+        fits = true;
+        break;
       case IF_BREAK:
         switch (command->mode) {
           case MODE_FLAT:
@@ -183,6 +186,10 @@ void doc_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
             command->indent
           )
         );
+        break;
+      case HARD_LINE:
+        position = options->tab_size * command->indent;
+        doc_buffer_newline(buffer, position);
         break;
       case IF_BREAK:
         switch (command->mode) {

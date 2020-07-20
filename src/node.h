@@ -11,6 +11,7 @@ enum doc_node_type {
   CONCAT,
   DEDENT,
   GROUP,
+  HARD_LINE,
   IF_BREAK,
   INDENT,
   LINE,
@@ -35,6 +36,7 @@ doc_node_t* doc_concat(size_t size, doc_node_t** children);
 doc_node_t* doc_concat_n(size_t size, ...);
 doc_node_t* doc_dedent(doc_node_t* child);
 doc_node_t* doc_group(doc_node_t* child);
+doc_node_t* doc_hard_line();
 doc_node_t* doc_if_break(doc_node_t* break_child, doc_node_t* flat_child);
 doc_node_t* doc_if_break_break_child(doc_node_t* node);
 doc_node_t* doc_if_break_flat_child(doc_node_t* node);

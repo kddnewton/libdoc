@@ -45,6 +45,8 @@ static doc_node_t* doc_debug_convert(doc_node_t* node) {
         doc_debug_convert(node->contents.child),
         doc_literal(")")
       );
+    case HARD_LINE:
+      return doc_literal("hardline");
     case IF_BREAK:
       return doc_group(
         doc_concat_n(3,

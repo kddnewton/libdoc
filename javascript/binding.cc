@@ -54,6 +54,10 @@ namespace binding {
         return doc_literal_line();
       }
 
+      if (object.Get("hard").ToBoolean()) {
+        return doc_hard_line();
+      }
+
       return doc_line();
     }
   }
