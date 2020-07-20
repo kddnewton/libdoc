@@ -41,8 +41,8 @@ doc_node_t* doc_if_break_flat_child(doc_node_t* node);
 doc_node_t* doc_indent(doc_node_t* child);
 doc_node_t* doc_join(doc_node_t* separator, size_t size, doc_node_t** content);
 doc_node_t* doc_line();
-doc_node_t* doc_literal(char* string);
-doc_node_t* doc_literal_n(size_t size, char* string);
+doc_node_t* doc_literal(const char* string);
+doc_node_t* doc_literal_n(size_t size, const char* string);
 doc_node_t* doc_literal_line();
 doc_node_t* doc_soft_line();
 

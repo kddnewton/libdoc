@@ -223,7 +223,7 @@ doc_node_t* doc_line() {
  * @param {char*} string - the borrowed content of this literal node
  * @returns {doc_node_t*} - a newly allocated node that will require freeing
  */
-doc_node_t* doc_literal(char* string) {
+doc_node_t* doc_literal(const char* string) {
   return doc_literal_n(strlen(string), string);
 }
 
@@ -233,7 +233,7 @@ doc_node_t* doc_literal(char* string) {
  * @param {char*} string - the borrowed content of this literal node
  * @returns {doc_node_t*} - a newly allocated node that will require freeing
  */
-doc_node_t* doc_literal_n(size_t size, char* string) {
+doc_node_t* doc_literal_n(size_t size, const char* string) {
   char *copied = (char *) doc_alloc(sizeof(char) * size);
   strncpy(copied, string, size);
 
