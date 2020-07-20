@@ -12,7 +12,7 @@ static doc_node_t* doc_debug_convert(doc_node_t* node) {
   switch (node->type) {
     case CONCAT: {
       doc_node_t **converted = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * node->size);
-      for (int idx = 0; idx < node->size; idx++) {
+      for (size_t idx = 0; idx < node->size; idx++) {
         converted[idx] = doc_debug_convert(node->contents.children[idx]);
       }
 

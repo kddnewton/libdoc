@@ -6,7 +6,7 @@
 #include "options.h"
 #include "print.h"
 
-int main(int argc, char **argv) {
+int main() {
   doc_options_t *options = doc_options_make(2, 80);
   doc_buffer_t *buffer = doc_buffer_make();
 

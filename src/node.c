@@ -37,7 +37,7 @@ static doc_node_t* doc_node_clone(doc_node_t *node) {
     case CONCAT:
     case IF_BREAK: {
       doc_node_t **cloned = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * node->size);
-      for (int idx = 0; idx < node->size; idx++) {
+      for (size_t idx = 0; idx < node->size; idx++) {
         cloned[idx] = doc_node_clone(node->contents.children[idx]);
       }
 
@@ -75,7 +75,7 @@ void doc_node_unmake(doc_node_t* node) {
       break;
     case CONCAT:
     case IF_BREAK:
-      for (int idx = 0; idx < node->size; idx++) {
+      for (size_t idx = 0; idx < node->size; idx++) {
         doc_node_unmake(node->contents.children[idx]);
       }
       break;
@@ -116,7 +116,7 @@ doc_node_t* doc_concat_n(size_t size, ...) {
   va_start(contents, size);
 
   doc_node_t **children = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * size);
-  for (int idx = 0; idx < size; idx++) {
+  for (size_t idx = 0; idx < size; idx++) {
     children[idx] = va_arg(contents, doc_node_t *);
   }
 
@@ -210,7 +210,7 @@ doc_node_t* doc_join(doc_node_t* separator, size_t size, doc_node_t** content) {
   size_t children_size = (size * 2) - 1;
   doc_node_t **children = (doc_node_t **) doc_alloc(sizeof(doc_node_t *) * children_size);
 
-  for (int content_idx = 0, children_idx = 0; content_idx < size; content_idx++) {
+  for (size_t content_idx = 0, children_idx = 0; content_idx < size; content_idx++) {
     if (content_idx != 0) {
       children[children_idx++] = doc_node_clone(separator);
     }
