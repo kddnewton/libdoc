@@ -6,11 +6,11 @@
 #include "memory.h"
 
 typedef struct doc_options {
-  size_t tab_size;
-  size_t line_length;
+  size_t tab_width;
+  size_t print_width;
 } doc_options_t;
 
-doc_options_t* doc_options_make(size_t tab_size, size_t line_length);
+doc_options_t* doc_options_make(size_t tab_width, size_t print_width);
 void doc_options_unmake(doc_options_t* options);
 
 #endif

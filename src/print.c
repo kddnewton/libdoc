@@ -174,7 +174,7 @@ void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* opt
       case DEDENT:
         doc_stack_push(
           stack,
-          doc_command_make(command->node->contents.child, command->mode, command->indent - 1)
+          doc_command_make(command->node->contents.child, command->mode, command->indent - options->tab_width)
         );
         break;
       case GROUP:
@@ -182,13 +182,13 @@ void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* opt
           stack,
           doc_command_make(
             command->node->contents.child,
-            doc_fits(command->node->contents.child, MODE_FLAT, command->indent, options->line_length - position) ? MODE_FLAT : MODE_BREAK,
+            doc_fits(command->node->contents.child, MODE_FLAT, command->indent, options->print_width - position) ? MODE_FLAT : MODE_BREAK,
             command->indent
           )
         );
         break;
       case HARD_LINE:
-        position = options->tab_size * command->indent;
+        position = command->indent;
         doc_buffer_newline(buffer, position);
         break;
       case IF_BREAK:
@@ -210,7 +210,7 @@ void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* opt
       case INDENT:
         doc_stack_push(
           stack,
-          doc_command_make(command->node->contents.child, command->mode, command->indent + 1)
+          doc_command_make(command->node->contents.child, command->mode, command->indent + options->tab_width)
         );
         break;
       case LINE:
@@ -220,7 +220,7 @@ void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* opt
             position += 1;
             break;
           case MODE_BREAK:
-            position = options->tab_size * command->indent;
+            position = command->indent;
             doc_buffer_newline(buffer, position);
             break;
         }
@@ -235,7 +235,7 @@ void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* opt
         break;
       case SOFT_LINE:
         if (command->mode == MODE_BREAK) {
-          position = options->tab_size * command->indent;
+          position = command->indent;
           doc_buffer_newline(buffer, position);
         }
         break;

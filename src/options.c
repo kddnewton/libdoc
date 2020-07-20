@@ -2,11 +2,11 @@
 
 /* Allocates and instantiates a new options struct.
  * 
- * @param {size_t} tab_size - the size of the tab to use
- * @param {size_t} line_length - the maximum length of a line
+ * @param {size_t} tab_width - the size of the tab to use
+ * @param {size_t} print_width - the maximum length of a line
  * @returns {doc_options_t*} - an options struct that will require freeing
  */
-doc_options_t* doc_options_make(size_t tab_size, size_t line_length) {
+doc_options_t* doc_options_make(size_t tab_width, size_t print_width) {
   doc_options_t *options;
 
   options = (doc_options_t *) doc_alloc(sizeof(doc_options_t));
@@ -14,8 +14,8 @@ doc_options_t* doc_options_make(size_t tab_size, size_t line_length) {
     return NULL;
   }
 
-  options->tab_size = tab_size;
-  options->line_length = line_length;
+  options->tab_width = tab_width;
+  options->print_width = print_width;
 
   return options;
 }
