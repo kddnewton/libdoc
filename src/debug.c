@@ -92,13 +92,10 @@ static doc_node_t* doc_debug_convert(doc_node_t* node) {
  */
 void doc_debug(doc_node_t* root) {
   doc_options_t *options = doc_options_make(2, 80);
-  doc_buffer_t *buffer = doc_buffer_make();
   doc_node_t *node = doc_debug_convert(root);
 
-  doc_print(buffer, node, options);
-  printf("%s\n", buffer->contents);
+  printf("%s\n", doc_print(node, options));
 
   doc_options_unmake(options);
-  doc_buffer_unmake(buffer);
   doc_node_unmake(node);
 }

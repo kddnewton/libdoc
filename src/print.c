@@ -153,7 +153,7 @@ static bool doc_fits(doc_node_t* root, enum mode mode, size_t indent, int size) 
  * @param {doc_node_t*} node - the node to print
  * @param {doc_options_t*} options - the options to use for printing
  */
-void doc_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
+void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
   int position = 0;
 
   doc_stack_t *stack = doc_stack_make(doc_command_make(root, MODE_BREAK, 0));
@@ -245,4 +245,21 @@ void doc_print(doc_buffer_t* buffer, doc_node_t* root, doc_options_t* options) {
   }
 
   doc_stack_unmake(stack);
+}
+
+/* Print the given doc node to a string using the given options.
+ * 
+ * @param {doc_node_t*} node - the node to print
+ * @param {doc_options_t*} options - the options to use for printing
+ * @returns {char*} - the printed result
+ */
+char* doc_print(doc_node_t* root, doc_options_t* options) {
+  doc_buffer_t *buffer = doc_buffer_make();
+  doc_buffer_print(buffer, root, options);
+
+  char *result = (char *) doc_alloc(sizeof(char) * buffer->size);
+  strncpy(result, buffer->contents, buffer->size);
+
+  doc_buffer_unmake(buffer);
+  return result;
 }

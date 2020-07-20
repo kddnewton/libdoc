@@ -10,6 +10,7 @@
 #include "options.h"
 #include "stack.h"
 
-void doc_print(doc_buffer_t* buffer, doc_node_t* node, doc_options_t* options);
+void doc_buffer_print(doc_buffer_t* buffer, doc_node_t* node, doc_options_t* options);
+char* doc_print(doc_node_t* root, doc_options_t* options);
 
 #endif
