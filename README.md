@@ -1,5 +1,7 @@
 # libdoc
 
+[![Build Status](https://github.com/kddeisz/libdoc/workflows/Main/badge.svg)](https://github.com/kddeisz/libdoc/actions)
+
 This project is a work-in-progress.
 
 This project is a C implementation of Philip Wadler's [A prettier printer](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf). The source is based on the JavaScript implementation [within prettier](https://github.com/prettier/prettier/tree/master/src/document). The function of this is to have a library that can be bound from multiple contexts (i.e., remove the need to run the printer through a node process. Hopefully this will make it easier to use printer from prettier within other formatters.
