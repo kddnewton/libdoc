@@ -60,6 +60,8 @@ namespace binding {
 
       return doc_line();
     }
+
+    return NULL;
   }
 
   Napi::String Print(const Napi::CallbackInfo& info) {
@@ -68,16 +70,23 @@ namespace binding {
     Napi::Object nodeArg = info[0].As<Napi::Object>();
     Napi::Object optionsArg = info[1].As<Napi::Object>();
 
-    doc_options_t *options = doc_options_make(2, 80);
-    doc_buffer_t *buffer = doc_buffer_make();
+    Napi::Value tabWidth = optionsArg.Get("tabWidth");
+    Napi::Value lineLength = optionsArg.Get("lineLength");
+
+    doc_options_t *options =
+      doc_options_make(
+        tabWidth.IsUndefined() ? 2 : (uint32_t) tabWidth.ToNumber(),
+        lineLength.IsUndefined() ? 80 : (uint32_t) lineLength.ToNumber()
+      );
 
     doc_node_t *node = convert(nodeArg);
-    doc_print(buffer, node, options);
-    Napi::String output = Napi::String::New(env, buffer->contents);
+
+    char *printed = doc_print(node, options);
+    Napi::String output = Napi::String::New(env, printed);
 
     doc_options_unmake(options);
-    doc_buffer_unmake(buffer);
     doc_node_unmake(node);
+    doc_dealloc(printed);
 
     return output;
   }

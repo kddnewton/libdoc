@@ -1,4 +1,3 @@
-const path = require("path");
 const { print } = require("./build/Release/binding.node");
 
 const concat = (parts) => ({ type: "concat", parts });
@@ -11,6 +10,15 @@ const line = { type: "line" };
 const literalline = { type: "line", hard: true, literal: true };
 const softline = { type: "line", soft: true };
 
-const node = group(concat(["Hello", line, "world!"]));
-
-console.log(print(node, { lineLength: 80, tabWidth: 2 }));
+module.exports = {
+  concat,
+  dedent,
+  indent,
+  group,
+  hardline,
+  ifBreak,
+  line,
+  literalline,
+  softline,
+  print
+};
