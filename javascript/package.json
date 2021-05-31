@@ -13,7 +13,7 @@
   "license": "MIT",
   "gypfile": true,
   "dependencies": {
-    "node-addon-api": "^3.2.0"
+    "node-addon-api": "^3.2.1"
   },
   "devDependencies": {
     "jest": "^27.0.1"
